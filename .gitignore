@@ -23,7 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment variables
+# Environment variables (local only)
 .env
 .env.local
-.env.production
+.env.development
+
+# Production env is committed for EasyPanel deployment
+# .env.production will be in the repo with build-time variables
