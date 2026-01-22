@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   DollarSign,
   TrendingDown,
@@ -12,6 +12,10 @@ import ColaboradorCard from './components/ColaboradorCard';
 import DailyTrendChart from './components/DailyTrendChart';
 import ServiceStatsChart from './components/ServiceStatsChart';
 import GastoDistributionChart from './components/GastoDistributionChart';
+import DashboardFilters, { FilterState } from './components/DashboardFilters';
+import ColaboradorGoalGauge from './components/ColaboradorGoalGauge';
+import WhatIfSimulator from './components/WhatIfSimulator';
+import DailyIncomeChart from './components/DailyIncomeChart';
 import { fetchTransactions } from './services/googleSheets';
 import {
   calculateDashboardMetrics,
@@ -28,6 +32,13 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FilterState>({
+    colaborador: '',
+    tipoIngreso: '',
+    tipoServicio: '',
+    fechaInicio: '',
+    fechaFin: ''
+  });
 
   const loadData = async () => {
     try {
@@ -54,36 +65,83 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const metrics = calculateDashboardMetrics(transactions);
-  const colaboradores = calculateColaboradorStats(transactions);
-  const servicios = calculateServiceStats(transactions);
-  const trends = calculateDailyTrends(transactions);
-  const gastos = calculateGastoDistribution(transactions);
+  // Filtrar transacciones
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter(t => {
+      if (filters.colaborador && t.colaborador !== filters.colaborador) return false;
+      if (filters.tipoIngreso && t.tipoMovimiento !== filters.tipoIngreso) return false;
+      if (filters.tipoServicio && t.tipoServicio !== filters.tipoServicio) return false;
+
+      if (filters.fechaInicio) {
+        const transDate = new Date(t.fecha);
+        const startDate = new Date(filters.fechaInicio);
+        if (transDate < startDate) return false;
+      }
+
+      if (filters.fechaFin) {
+        const transDate = new Date(t.fecha);
+        const endDate = new Date(filters.fechaFin);
+        if (transDate > endDate) return false;
+      }
+
+      return true;
+    });
+  }, [transactions, filters]);
+
+  // Obtener listas únicas para los filtros
+  const uniqueColaboradores = useMemo(() =>
+    Array.from(new Set(transactions.map(t => t.colaborador))).filter(Boolean).sort(),
+    [transactions]
+  );
+
+  const uniqueTiposIngreso = useMemo(() =>
+    Array.from(new Set(transactions.map(t => t.tipoMovimiento))).filter(Boolean).sort(),
+    [transactions]
+  );
+
+  const uniqueTiposServicio = useMemo(() =>
+    Array.from(new Set(transactions.map(t => t.tipoServicio))).filter(Boolean).sort(),
+    [transactions]
+  );
+
+  // Calcular métricas con transacciones filtradas
+  const metrics = calculateDashboardMetrics(filteredTransactions);
+  const colaboradores = calculateColaboradorStats(filteredTransactions);
+  const servicios = calculateServiceStats(filteredTransactions);
+  const trends = calculateDailyTrends(filteredTransactions);
+  const gastos = calculateGastoDistribution(filteredTransactions);
 
   if (loading && transactions.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="w-12 h-12 text-sherman-primary animate-spin mx-auto mb-4" />
-          <p className="text-xl text-slate-300">Cargando datos de Sherman...</p>
+          <p className="text-xl text-slate-700">Cargando datos de Sherman...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white p-4 md:p-8">
+    <div className="min-h-screen bg-white text-slate-900 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-sherman-primary to-sherman-secondary bg-clip-text text-transparent">
-                Sherman Dashboard
-              </h1>
-              <p className="text-slate-400 mt-2">
-                Gestión y análisis del negocio canino
-              </p>
+            <div className="flex items-center gap-4">
+              <img
+                src="/logo.jpeg"
+                alt="Sherman Logo"
+                className="w-16 h-16 rounded-full object-cover shadow-lg border-2 border-sherman-primary"
+              />
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-sherman-primary to-sherman-secondary bg-clip-text text-transparent">
+                  Sherman Dashboard
+                </h1>
+                <p className="text-slate-600 mt-2">
+                  Gestión y análisis del negocio canino
+                </p>
+              </div>
             </div>
             <button
               onClick={loadData}
@@ -96,7 +154,7 @@ function App() {
           </div>
 
           {lastUpdate && (
-            <div className="flex items-center gap-2 text-sm text-slate-400">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
               <Calendar className="w-4 h-4" />
               <span>
                 Última actualización: {lastUpdate.toLocaleTimeString('es-CO')}
@@ -110,6 +168,15 @@ function App() {
             </div>
           )}
         </div>
+
+        {/* Filtros */}
+        <DashboardFilters
+          filters={filters}
+          onFilterChange={setFilters}
+          colaboradores={uniqueColaboradores}
+          tiposIngreso={uniqueTiposIngreso}
+          tiposServicio={uniqueTiposServicio}
+        />
 
         {/* Métricas Principales */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -145,24 +212,29 @@ function App() {
 
         {/* Métricas de Hoy */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="card bg-gradient-to-br from-green-900/20 to-green-800/10 border-green-500/20">
-            <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-green-400" />
+          <div className="card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+            <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 text-slate-900">
+              <DollarSign className="w-5 h-5 text-green-600" />
               Ingresos Hoy
             </h3>
-            <p className="text-3xl font-bold text-green-400">
+            <p className="text-3xl font-bold text-green-600">
               {formatCurrency(metrics.ingresosHoy)}
             </p>
           </div>
-          <div className="card bg-gradient-to-br from-red-900/20 to-red-800/10 border-red-500/20">
-            <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-              <TrendingDown className="w-5 h-5 text-red-400" />
+          <div className="card bg-gradient-to-br from-red-50 to-orange-50 border-red-200">
+            <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 text-slate-900">
+              <TrendingDown className="w-5 h-5 text-red-600" />
               Gastos Hoy
             </h3>
-            <p className="text-3xl font-bold text-red-400">
+            <p className="text-3xl font-bold text-red-600">
               {formatCurrency(metrics.gastosHoy)}
             </p>
           </div>
+        </div>
+
+        {/* Análisis Diario de Ingresos */}
+        <div className="mb-8">
+          <DailyIncomeChart data={trends} />
         </div>
 
         {/* Gráficos */}
@@ -175,6 +247,43 @@ function App() {
         {gastos.length > 0 && (
           <div className="mb-8">
             <GastoDistributionChart data={gastos} />
+          </div>
+        )}
+
+        {/* Metas de Colaboradores */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-slate-900">
+            <span className="text-sherman-primary">🎯</span>
+            Seguimiento de Metas (COP $1,700,000)
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {colaboradores.slice(0, 6).map((colaborador) => (
+              <ColaboradorGoalGauge
+                key={colaborador.nombre}
+                colaborador={colaborador}
+                goalAmount={1700000}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Simulador What-If */}
+        {colaboradores.length > 0 && servicios.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-slate-900">
+              <span className="text-sherman-secondary">🔮</span>
+              Simuladores de Meta por Colaborador
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {colaboradores.slice(0, 4).map((colaborador) => (
+                <WhatIfSimulator
+                  key={colaborador.nombre}
+                  colaborador={colaborador}
+                  servicios={servicios}
+                  goalAmount={1700000}
+                />
+              ))}
+            </div>
           </div>
         )}
 
@@ -196,7 +305,7 @@ function App() {
         </div>
 
         {/* Footer */}
-        <div className="text-center text-slate-500 text-sm mt-12 pb-4">
+        <div className="text-center text-slate-600 text-sm mt-12 pb-4">
           <p>Sherman Dashboard v1.0 - {transactions.length} transacciones cargadas</p>
         </div>
       </div>

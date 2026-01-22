@@ -28,22 +28,23 @@ const ServiceStatsChart: React.FC<ServiceStatsChartProps> = ({ data }) => {
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
           <XAxis
             dataKey="tipoServicio"
-            stroke="#94a3b8"
+            stroke="#64748b"
             style={{ fontSize: '12px' }}
           />
           <YAxis
-            stroke="#94a3b8"
+            stroke="#64748b"
             style={{ fontSize: '12px' }}
             tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#1e293b',
-              border: '1px solid #334155',
-              borderRadius: '8px'
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '8px',
+              color: '#1e293b'
             }}
             formatter={(value: number) => formatCurrency(value)}
           />
@@ -60,20 +61,20 @@ const ServiceStatsChart: React.FC<ServiceStatsChartProps> = ({ data }) => {
         {data.map((service, index) => (
           <div
             key={service.tipoServicio}
-            className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg"
+            className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
               />
-              <span className="text-sm text-slate-300">{service.tipoServicio}</span>
+              <span className="text-sm text-slate-700">{service.tipoServicio}</span>
             </div>
             <div className="text-right">
-              <p className="font-semibold text-white">
+              <p className="font-semibold text-slate-900">
                 {formatCurrency(service.totalIngresos)}
               </p>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 {service.cantidadServicios} servicios
               </p>
             </div>

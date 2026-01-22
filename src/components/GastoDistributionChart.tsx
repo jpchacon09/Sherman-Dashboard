@@ -28,8 +28,8 @@ const GastoDistributionChart: React.FC<GastoDistributionChartProps> = ({ data })
             data={data}
             cx="50%"
             cy="50%"
-            labelLine={false}
-            label={({ concepto, porcentaje }) => `${concepto}: ${porcentaje.toFixed(1)}%`}
+            labelLine={true}
+            label={({ porcentaje }) => porcentaje > 5 ? `${porcentaje.toFixed(1)}%` : ''}
             outerRadius={100}
             fill="#8884d8"
             dataKey="monto"
@@ -40,9 +40,10 @@ const GastoDistributionChart: React.FC<GastoDistributionChartProps> = ({ data })
           </Pie>
           <Tooltip
             contentStyle={{
-              backgroundColor: '#1e293b',
-              border: '1px solid #334155',
-              borderRadius: '8px'
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '8px',
+              color: '#1e293b'
             }}
             formatter={(value: number) => formatCurrency(value)}
           />
@@ -53,20 +54,20 @@ const GastoDistributionChart: React.FC<GastoDistributionChartProps> = ({ data })
         {data.map((gasto, index) => (
           <div
             key={gasto.concepto}
-            className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-colors"
+            className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
               />
-              <span className="text-sm text-slate-300">{gasto.concepto}</span>
+              <span className="text-sm text-slate-700">{gasto.concepto}</span>
             </div>
             <div className="text-right">
-              <p className="font-semibold text-red-400">
+              <p className="font-semibold text-red-600">
                 {formatCurrency(gasto.monto)}
               </p>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 {gasto.porcentaje.toFixed(1)}%
               </p>
             </div>

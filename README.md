@@ -1,26 +1,65 @@
-# Sherman Dashboard
+# 🐕 Sherman Dashboard
 
-Dashboard en tiempo real para la gestión del negocio canino Sherman, con visualización de métricas financieras, análisis de colaboradores y servicios.
+Dashboard moderno y profesional para la gestión y análisis del negocio canino Sherman. Incluye seguimiento en tiempo real de ingresos, gastos, colaboradores y metas financieras.
 
-## Características
+![Sherman Dashboard](https://img.shields.io/badge/version-1.0.0-blue)
+![React](https://img.shields.io/badge/React-18.3-61dafb)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6)
+![Vite](https://img.shields.io/badge/Vite-5.4-646cff)
 
-- **Métricas en Tiempo Real**: Visualización de ingresos, gastos, balance y margen de ganancia
-- **Análisis de Colaboradores**: Ranking de colaboradores por ingresos generados
-- **Estadísticas de Servicios**: Análisis detallado por tipo de servicio (Rutas, Guardería, etc.)
-- **Tendencias Diarias**: Gráficos de evolución temporal
-- **Distribución de Gastos**: Análisis visual de categorías de gastos
-- **Actualización Automática**: Datos actualizados cada 30 segundos
+## ✨ Características
 
-## Stack Tecnológico
+### 📊 Métricas en Tiempo Real
+- **Total de Ingresos y Gastos**: Visualización clara del flujo de efectivo
+- **Balance General**: Estado financiero actualizado
+- **Margen de Ganancia**: Análisis de rentabilidad
+- **Métricas Diarias**: Ingresos y gastos del día en curso
 
-- **Frontend**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **Estilos**: Tailwind CSS
-- **Gráficos**: Recharts
-- **Iconos**: Lucide React
-- **Fechas**: date-fns
-- **HTTP Client**: Axios
-- **Base de Datos**: Google Sheets API
+### 👥 Gestión de Colaboradores
+- **Top Colaboradores**: Ranking por desempeño
+- **Seguimiento Individual**: Ingresos, servicios realizados y promedios
+- **Perros Atendidos**: Contador de mascotas por colaborador
+
+### 🎯 Seguimiento de Metas
+- **Gráficos de Velocímetro**: Visualización del progreso hacia la meta de $1,700,000 COP
+- **Indicadores de Progreso**: Sistema de colores según el avance
+- **Alertas de Meta**: Notificación cuando se alcanza el objetivo
+
+### 🔮 Simulador "What If"
+- **Proyecciones por Servicio**: Calcula cuántos servicios se necesitan para alcanzar la meta
+- **Análisis por Tipo de Servicio**: Comparación de diferentes estrategias
+- **Visualización Interactiva**: Gráficos de barras con información detallada
+
+### 📈 Análisis Avanzado
+- **Gráfico de Tendencias Diarias**: Seguimiento de ingresos, gastos y balance
+- **Distribución de Gastos**: Pie chart con categorías de gastos
+- **Ingresos por Servicio**: Análisis de los servicios más rentables
+- **Análisis Temporal**: Gráficos de ingresos por días con promedios
+
+### 🔍 Filtros Inteligentes
+- **Por Colaborador**: Ver rendimiento individual
+- **Por Tipo de Movimiento**: Filtrar ingresos o gastos
+- **Por Tipo de Servicio**: Analizar servicios específicos
+- **Por Rango de Fechas**: Análisis temporal personalizado
+- **Chips Visuales**: Vista rápida de filtros activos
+
+### 🎨 Diseño Moderno
+- **Interfaz Limpia**: Fondo blanco con elementos contrastantes
+- **Responsive**: Se adapta a móvil, tablet y desktop
+- **Logo Personalizado**: Branding de Sherman en el header
+- **Gradientes y Colores**: Paleta profesional azul/púrpura/verde
+
+## 🚀 Tecnologías
+
+- **React 18.3** - Framework UI
+- **TypeScript 5.5** - Tipado estático
+- **Vite 5.4** - Build tool ultra-rápido
+- **Tailwind CSS 3.4** - Estilos utility-first
+- **Recharts 2.14** - Gráficos interactivos
+- **Lucide React** - Iconos modernos
+- **Google Sheets API** - Sincronización de datos
+- **Date-fns** - Manejo de fechas
+- **Docker + Nginx** - Despliegue en producción
 
 ## Instalación
 
@@ -56,32 +95,38 @@ VITE_SHEET_NAME=Finance
 5. Restringe la API Key solo a Google Sheets API
 6. Copia la API Key y pégala en tu archivo `.env`
 
-## Estructura del Proyecto
+## 📊 Estructura del Proyecto
 
 ```
 sherman-dashboard/
 ├── src/
 │   ├── components/          # Componentes React
-│   │   ├── MetricCard.tsx
-│   │   ├── ColaboradorCard.tsx
-│   │   ├── DailyTrendChart.tsx
-│   │   ├── ServiceStatsChart.tsx
-│   │   └── GastoDistributionChart.tsx
-│   ├── services/            # Servicios de API
-│   │   └── googleSheets.ts
-│   ├── utils/               # Utilidades y procesadores
-│   │   └── dataProcessors.ts
-│   ├── types/               # Tipos TypeScript
-│   │   └── index.ts
-│   ├── App.tsx              # Componente principal
-│   ├── main.tsx             # Punto de entrada
-│   └── index.css            # Estilos globales
-├── public/                  # Archivos estáticos
-├── index.html
-├── package.json
-├── vite.config.ts
-├── tailwind.config.js
-└── tsconfig.json
+│   │   ├── MetricCard.tsx          # Tarjeta de métricas
+│   │   ├── ColaboradorCard.tsx     # Tarjeta de colaborador
+│   │   ├── ColaboradorGoalGauge.tsx # Velocímetro de metas
+│   │   ├── WhatIfSimulator.tsx     # Simulador what-if
+│   │   ├── DashboardFilters.tsx    # Filtros del dashboard
+│   │   ├── DailyIncomeChart.tsx    # Gráfico de ingresos diarios
+│   │   ├── DailyTrendChart.tsx     # Gráfico de tendencias
+│   │   ├── ServiceStatsChart.tsx   # Gráfico de servicios
+│   │   └── GastoDistributionChart.tsx # Gráfico de gastos
+│   ├── services/            # Servicios
+│   │   └── googleSheets.ts         # Integración Google Sheets
+│   ├── types/               # Definiciones TypeScript
+│   │   └── index.ts               # Tipos del dashboard
+│   ├── utils/               # Utilidades
+│   │   └── dataProcessors.ts      # Procesamiento de datos
+│   ├── App.tsx             # Componente principal
+│   ├── main.tsx            # Entry point
+│   └── index.css           # Estilos globales
+├── public/
+│   └── logo.jpeg           # Logo de Sherman
+├── Dockerfile              # Configuración Docker
+├── nginx.conf              # Configuración Nginx
+├── build.sh                # Script de construcción
+├── .dockerignore          # Archivos ignorados por Docker
+├── DEPLOY_EASYPANEL.md    # Guía de despliegue
+└── README.md              # Este archivo
 ```
 
 ## Desarrollo
@@ -107,35 +152,52 @@ Los archivos optimizados se generarán en la carpeta `dist/`
 npm run preview
 ```
 
-## Despliegue
+## 🐳 Despliegue con Docker
 
-### Vercel (Recomendado)
+### Build local
 
-1. Instalar Vercel CLI:
 ```bash
-npm i -g vercel
+docker build \
+  --build-arg VITE_GOOGLE_API_KEY=tu_api_key \
+  --build-arg VITE_SPREADSHEET_ID=tu_spreadsheet_id \
+  --build-arg VITE_SHEET_NAME=Finance \
+  --build-arg VITE_SHEET_RANGE=A:Z \
+  -t sherman-dashboard .
 ```
 
-2. Desplegar:
+### Ejecutar contenedor
+
 ```bash
-vercel
+docker run -p 80:80 sherman-dashboard
 ```
 
-3. Configurar variables de entorno en Vercel Dashboard
+## 🌐 Despliegue en EasyPanel
 
-### Netlify
+**📘 Sigue la guía completa en [DEPLOY_EASYPANEL.md](./DEPLOY_EASYPANEL.md)**
 
-1. Instalar Netlify CLI:
-```bash
-npm i -g netlify-cli
-```
+Resumen rápido:
+1. Sube el proyecto a GitHub
+2. Crea un nuevo servicio en EasyPanel
+3. Conecta tu repositorio
+4. Configura las variables de entorno:
+   - `VITE_GOOGLE_API_KEY`
+   - `VITE_SPREADSHEET_ID`
+   - `VITE_SHEET_NAME`
+   - `VITE_SHEET_RANGE`
+5. Despliega con Docker
+6. ¡Listo! Tu dashboard estará en línea en minutos
 
-2. Desplegar:
-```bash
-netlify deploy --prod
-```
+### Otras Opciones de Despliegue
 
-3. Configurar variables de entorno en Netlify Dashboard
+#### Vercel
+1. Importa el repositorio en Vercel
+2. Configura las variables de entorno
+3. Despliega automáticamente
+
+#### Netlify
+1. Conecta tu repositorio de GitHub
+2. Configura las variables de entorno
+3. Despliega con un clic
 
 ## Estructura de Datos (Google Sheets)
 
@@ -179,7 +241,36 @@ El dashboard espera la siguiente estructura en la hoja "Finance":
 
 Si no se configura una API Key, el dashboard funcionará con datos de ejemplo para pruebas y desarrollo.
 
-## Personalización
+## 📱 Características Responsive
+
+- **Desktop**: Layout de 3-4 columnas con todos los gráficos visibles
+- **Tablet**: Layout de 2 columnas adaptativo
+- **Móvil**: Layout de 1 columna con scroll vertical optimizado
+
+## 🎨 Paleta de Colores
+
+- **Primary**: `#3b82f6` (Azul)
+- **Secondary**: `#8b5cf6` (Púrpura)
+- **Accent**: `#10b981` (Verde)
+- **Background**: `#ffffff` (Blanco)
+- **Text**: `#1e293b` (Slate 900)
+
+## 🔄 Actualización de Datos
+
+- **Automática**: Cada 30 segundos
+- **Manual**: Botón "Actualizar" en el header
+- **Indicador**: Muestra la hora de última actualización
+
+## 🛠️ Scripts Disponibles
+
+```bash
+npm run dev      # Servidor de desarrollo
+npm run build    # Build para producción
+npm run preview  # Preview del build
+npm run lint     # Linter ESLint
+```
+
+## 🔧 Personalización
 
 ### Colores del Tema
 
@@ -207,22 +298,25 @@ const interval = setInterval(() => {
 }, 30000); // Cambiar 30000 (30 segundos) al tiempo deseado en ms
 ```
 
-## Contribuir
+## 📄 Licencia
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+Este proyecto es privado y está diseñado específicamente para el negocio Sherman.
 
-## Licencia
+## 👨‍💻 Autor
 
-MIT License
+Desarrollado con ❤️ para Sherman Dashboard
 
-## Soporte
+## 🤝 Contribuir
 
-Para problemas o preguntas, abre un issue en el repositorio.
+Este es un proyecto privado. Para cambios o mejoras, contacta al administrador del proyecto.
+
+## 📧 Soporte
+
+Para soporte o consultas sobre el dashboard:
+- Revisa la [Guía de Despliegue](./DEPLOY_EASYPANEL.md)
+- Verifica los logs en la consola del navegador
+- Contacta al equipo de desarrollo
 
 ---
 
-Desarrollado con ❤️ para Sherman
+**Sherman Dashboard v1.0** - Dashboard Profesional de Gestión Canina 🐕

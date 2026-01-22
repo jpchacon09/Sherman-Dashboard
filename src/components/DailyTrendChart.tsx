@@ -32,22 +32,23 @@ const DailyTrendChart: React.FC<DailyTrendChartProps> = ({ data }) => {
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={formattedData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
           <XAxis
             dataKey="fechaDisplay"
-            stroke="#94a3b8"
+            stroke="#64748b"
             style={{ fontSize: '12px' }}
           />
           <YAxis
-            stroke="#94a3b8"
+            stroke="#64748b"
             style={{ fontSize: '12px' }}
             tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#1e293b',
-              border: '1px solid #334155',
-              borderRadius: '8px'
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '8px',
+              color: '#1e293b'
             }}
             formatter={(value: number) => formatCurrency(value)}
           />
